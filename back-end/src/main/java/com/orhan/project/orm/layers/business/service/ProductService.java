@@ -20,5 +20,7 @@ public interface ProductService {
 
     List<CategoryDto> listCategories();
     Optional<ProductDto> getProductById(long productId);
+    ProductDto getProductById(Long productId);
+    List<ProductDto> getAllProducts();
     }
 

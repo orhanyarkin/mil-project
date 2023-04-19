@@ -5,40 +5,36 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "cart_product")
 public class CartProduct {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cart_product_id")
-    private Long cartProductId;
+    private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @Column(name = "sales_quantity")
-    private int salesQuantity;
-
-    public CartProduct(Long cartProductId, Cart cart, Product product, int salesQuantity) {
-        this.cartProductId = cartProductId;
-        this.cart = cart;
-        this.product = product;
-        this.salesQuantity = salesQuantity;
-    }
+    @Column(name="sales_quantity")
+    private int quantity;
 
     public CartProduct() {
-
     }
 
-    public Long getCartProductId() {
-        return cartProductId;
+    public CartProduct(Cart cart, Product product, int quantity) {
+        this.cart = cart;
+        this.product = product;
+        this.quantity = quantity;
     }
 
-    public void setCartProductId(Long cartProductId) {
-        this.cartProductId = cartProductId;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Cart getCart() {
@@ -57,12 +53,18 @@ public class CartProduct {
         this.product = product;
     }
 
-    public int getSalesQuantity() {
-        return salesQuantity;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setSalesQuantity(int salesQuantity) {
-        this.salesQuantity = salesQuantity;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }
+
+
+
+
+
+
 

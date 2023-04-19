@@ -1,11 +1,16 @@
 package com.orhan.project.orm.layers.business.dto;
 
+import com.orhan.project.orm.layers.data.entity.Product;
+
 public class ProductDto {
     private Long productId;
     private String productName;
     private Double salesPrice;
     private Long categoryId;
     private String categoryName;
+
+    public ProductDto() {
+    }
 
     public Long getProductId() {
         return productId;
@@ -46,4 +51,12 @@ public class ProductDto {
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
+    public Product toEntity() {
+        Product product = new Product();
+        product.setProductId(this.productId);
+        product.setProductName(this.productName);
+        product.setSalesPrice(this.salesPrice);
+        return product;
+    }
+
 }

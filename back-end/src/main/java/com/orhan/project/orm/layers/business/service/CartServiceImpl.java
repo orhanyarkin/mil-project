@@ -1,66 +1,112 @@
 package com.orhan.project.orm.layers.business.service;
 
-
+import com.orhan.project.orm.layers.business.dto.CartDto;
+import com.orhan.project.orm.layers.business.dto.CartProductDto;
 import com.orhan.project.orm.layers.data.entity.Cart;
-import com.orhan.project.orm.layers.data.entity.CartStatus;
-import com.orhan.project.orm.layers.data.entity.Product;
+import com.orhan.project.orm.layers.data.entity.CartProduct;
 import com.orhan.project.orm.layers.data.repository.CartRepository;
-import com.orhan.project.orm.layers.data.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CartServiceImpl implements CartService {
-    private final CartRepository cartRepository;
-    private final ProductRepository productRepository;
+  @Autowired
+  private CartRepository cartRepository;
+  @Autowired
+  private CartProductService cartProductService;
 
-    public CartServiceImpl(CartRepository cartRepository, ProductRepository productRepository) {
-        this.cartRepository = cartRepository;
-        this.productRepository = productRepository;
-    }
+  @Override
+  public CartDto getCartById(Long cartId) {
+    Cart cart = cartRepository.findById(cartId).orElse(null);
+    if (cart != null) {
+      CartDto cartDto = new CartDto();
+      cartDto.setId(cart.getId());
+      List<CartProductDto> cartProductDtos = new ArrayList<>();
+      for (CartProduct cartProduct : cart.getProducts()) {
+        CartProductDto cartProductDto = new CartProductDto();
+        cartProductDto.setProductId(cartProduct.getId());
+        cartProductDto.setProductId(cartProduct.getProduct().getProductId());
+        cartProductDto.setQuantity(cartProduct.getQuantity());
+        cartProductDtos.add(cartProductDto);
+      }
 
-    @Override
-    public Cart getCartById(Long id) {
-        Optional<Cart> cart = cartRepository.findById(id);
-        if (cart.isPresent()) {
-            return cart.get();
-        } else {
-            return getOrCreateCart(id);
-        }
-    }
-    @Override
-    public Cart getOrCreateCart(Long cartId) {
-        Optional<Cart> optionalCart = cartRepository.findById(cartId);
-        if (optionalCart.isPresent()) {
-            return optionalCart.get();
-        }
-        return cartRepository.save(new Cart(cartId,CartStatus.NEW));
+      cartDto.setCartProducts(cartProductDtos);
+      return cartDto;
     }
 
-    @Override
-    public Cart addProductToCart(Long cartId, Long productId) {
-        Product product = productRepository.findById(productId).orElseThrow();
-        Cart cart = getOrCreateCart(cartId);
-        cart.addProduct(product);
-        cartRepository.save(cart);
-        return cart;
-    }
+    return null;
+  }
 
-    @Override
-    public Cart removeProductFromCart(Long cartId, Long productId) {
-        Product product = productRepository.findById(productId).orElseThrow();
-        Cart cart = getOrCreateCart(cartId);
-        cart.removeProduct(product);
-        cartRepository.save(cart);
-        return cart;
-    }
+  @Override
+  public void addProductToCart(Long cartId, Long productId, int quantity) {
+    cartProductService.addProductToCart(cartId, productId, quantity);
+  }
 
-    @Override
-    public String checkoutCart(Long cartId) {
-        Cart cart = getOrCreateCart(cartId);
-        cart.setCartStatus(CartStatus.COMPLETED);
-        cartRepository.save(cart);
-        return null;
+  @Override
+  public void removeProductFromCart(Long cartId, Long productId) {
+    cartProductService.removeProductFromCart(cartId, productId);
+  }
+
+  @Override
+  public void checkoutCart(Long cartId) {
+    Cart cart = cartRepository.findById(cartId).orElse(null);
+    if (cart != null) {
+      cartRepository.delete(cart);
     }
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

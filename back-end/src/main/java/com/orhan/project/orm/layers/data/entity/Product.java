@@ -13,6 +13,13 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    public Product(int productId) {
+    }
+
+    public Product() {
+
+    }
+
     public Long getProductId() {
         return productId;
     }

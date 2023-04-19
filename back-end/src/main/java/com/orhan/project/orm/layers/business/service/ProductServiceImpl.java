@@ -90,6 +90,17 @@ public class ProductServiceImpl implements ProductService {
         }
         return Optional.empty();
     }
+
+    @Override
+    public ProductDto getProductById(Long productId) {
+        return null;
+    }
+
+    @Override
+    public List<ProductDto> getAllProducts() {
+        return null;
+    }
+
     private Product toEntity(ProductDto productDto){
     Product product=new Product();
     product.setProductId(productDto.getProductId());

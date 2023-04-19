@@ -1,12 +1,16 @@
 package com.orhan.project.orm.layers.business.service;
 
-import com.orhan.project.orm.layers.data.entity.Cart;
+import com.orhan.project.orm.layers.business.dto.CartDto;
 
 public interface CartService {
-    Cart getOrCreateCart(Long cartId);
-    Cart addProductToCart(Long cartId, Long productId);
-    Cart removeProductFromCart(Long cartId, Long productId);
-    String checkoutCart(Long cartId);
-
-    Cart getCartById(Long id);
+    CartDto getCartById(Long cartId);
+    void addProductToCart(Long cartId, Long productId, int quantity);
+    void removeProductFromCart(Long cartId, Long productId);
+    void checkoutCart(Long cartId);
 }
+
+
+
+
+
+
